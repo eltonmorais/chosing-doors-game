@@ -56,7 +56,7 @@ class _BottomSheetAmountChooseState extends State<BottomSheetAmountChoose> {
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: Text("Escolha o número de caixas"),
+                        child: Text("Escolha o número de maletas"),
                       ),
                     ],
                   ),

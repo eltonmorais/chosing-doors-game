@@ -13,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("O Jogo das Caixas"),
+        title: Text("O Jogo das Maletas"),
         backgroundColor: Colors.black,
         elevation: 0,
       ),
