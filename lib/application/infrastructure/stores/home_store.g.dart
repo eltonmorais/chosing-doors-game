@@ -9,11 +9,33 @@ part of 'home_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$HomeStore on _HomeStoreBase, Store {
+  Computed<int> _$boxAmountComputed;
+
+  @override
+  int get boxAmount =>
+      (_$boxAmountComputed ??= Computed<int>(() => super.boxAmount)).value;
   Computed<int> _$yourChoiceComputed;
 
   @override
   int get yourChoice =>
       (_$yourChoiceComputed ??= Computed<int>(() => super.yourChoice)).value;
+
+  final _$_boxAmountAtom = Atom(name: '_HomeStoreBase._boxAmount');
+
+  @override
+  int get _boxAmount {
+    _$_boxAmountAtom.context.enforceReadPolicy(_$_boxAmountAtom);
+    _$_boxAmountAtom.reportObserved();
+    return super._boxAmount;
+  }
+
+  @override
+  set _boxAmount(int value) {
+    _$_boxAmountAtom.context.conditionallyRunInAction(() {
+      super._boxAmount = value;
+      _$_boxAmountAtom.reportChanged();
+    }, _$_boxAmountAtom, name: '${_$_boxAmountAtom.name}_set');
+  }
 
   final _$stageAtom = Atom(name: '_HomeStoreBase.stage');
 
@@ -87,6 +109,16 @@ mixin _$HomeStore on _HomeStoreBase, Store {
       ActionController(name: '_HomeStoreBase');
 
   @override
+  dynamic initializeBoxes() {
+    final _$actionInfo = _$_HomeStoreBaseActionController.startAction();
+    try {
+      return super.initializeBoxes();
+    } finally {
+      _$_HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   dynamic makeChoice(int value) {
     final _$actionInfo = _$_HomeStoreBaseActionController.startAction();
     try {
@@ -129,7 +161,7 @@ mixin _$HomeStore on _HomeStoreBase, Store {
   @override
   String toString() {
     final string =
-        'stage: ${stage.toString()},goldPot: ${goldPot.toString()},options: ${options.toString()},yourChoice: ${yourChoice.toString()}';
+        'stage: ${stage.toString()},goldPot: ${goldPot.toString()},options: ${options.toString()},boxAmount: ${boxAmount.toString()},yourChoice: ${yourChoice.toString()}';
     return '{$string}';
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:moduler_route/moduler_route.dart';
 import 'package:choosing_door_game/application/infrastructure/stores/home_store.dart';
+import 'package:choosing_door_game/presentation/home/widgets/bottom_sheet.dart';
 import 'package:choosing_door_game/application/common/extensions/game_stage.dart';
 
 class Home extends StatefulWidget {
@@ -26,6 +27,26 @@ class _HomeState extends State<Home> {
             },
             child: Icon(Icons.replay),
           ),
+          SizedBox(
+            width: 10,
+          ),
+          InkWell(
+            onTap: () async {
+              
+              int _boxes = await showModalBottomSheet<int>(
+                  context: context,
+                  builder: (_) {
+                    return BottomSheetAmountChoose();
+                  });
+              setState(() {
+                _homeStore = HomeStore(boxes: _boxes);
+              });
+            },
+            child: Icon(Icons.settings),
+          ),
+          SizedBox(
+            width: 10,
+          ),
         ],
       ),
       body: SafeArea(
@@ -38,7 +59,7 @@ class _HomeState extends State<Home> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 5, childAspectRatio: 1),
                   children: List.generate(
-                    10,
+                    _homeStore.boxAmount,
                     (i) {
                       int _box = i + 1;
 

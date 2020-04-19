@@ -7,12 +7,17 @@ part 'home_store.g.dart';
 class HomeStore = _HomeStoreBase with _$HomeStore;
 
 abstract class _HomeStoreBase with Store {
-  Random _randomizer = Random();
+  final int boxes;
+  Random _random = Random();
 
-  _HomeStoreBase() {
-    goldPot = _randomizer.nextInt(9) + 1;
-    options.addAll([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  _HomeStoreBase({this.boxes}) {
+    _boxAmount = boxes ?? 10;
+    goldPot = _randomizer();
+    initializeBoxes();
   }
+
+  @observable
+  int _boxAmount;
 
   @observable
   GameStage stage = GameStage.Start;
@@ -27,7 +32,20 @@ abstract class _HomeStoreBase with Store {
   ObservableList<int> options = ObservableList<int>();
 
   @computed
+  int get boxAmount => _boxAmount;
+
+  @computed
   int get yourChoice => _yourChoice;
+
+  @action
+  initializeBoxes() {
+    options.clear();
+    int _current = 1;
+    while (_current <= boxAmount) {
+      options.add(_current);
+      _current++;
+    }
+  }
 
   @action
   makeChoice(int value) {
@@ -41,11 +59,15 @@ abstract class _HomeStoreBase with Store {
     }
   }
 
+  int _randomizer() {
+    return _random.nextInt(_boxAmount - 1) + 1;
+  }
+
   int _getRandomExcept() {
     int _return;
 
     while (_return == null) {
-      int _try = _randomizer.nextInt(9) + 1;
+      int _try = _randomizer();
       if (_try != yourChoice && _try != goldPot) {
         _return = _try;
       }
@@ -66,9 +88,8 @@ abstract class _HomeStoreBase with Store {
   @action
   reset() {
     _yourChoice = null;
-    goldPot = _randomizer.nextInt(9) + 1;
-    options.clear();
-    options.addAll([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    goldPot = _randomizer();
+    initializeBoxes();
     stage = GameStage.Start;
   }
 
